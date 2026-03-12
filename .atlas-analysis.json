@@ -1,0 +1,48 @@
+{
+  "projectType": "frontend",
+  "projectName": "Vicenta",
+  "projectDescription": "A modern Next.js web application built with React, TypeScript, and Tailwind CSS",
+  "theme": "palm",
+  "primaryColor": "#0070f3",
+  "lightColor": "#3291ff",
+  "darkColor": "#0761d1",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "introduction",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Development",
+        "pages": [
+          "development/setup",
+          "development/project-structure",
+          "development/styling"
+        ]
+      },
+      {
+        "group": "Deployment",
+        "pages": [
+          "deployment/overview",
+          "deployment/vercel"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Next.js 14 App Router",
+    "React 18 with TypeScript",
+    "Tailwind CSS for styling",
+    "Optimized fonts with next/font",
+    "Dark mode support"
+  ],
+  "publicApiSurface": [
+    "Home page component",
+    "RootLayout component",
+    "Global CSS styles",
+    "Tailwind configuration"
+  ]
+}
