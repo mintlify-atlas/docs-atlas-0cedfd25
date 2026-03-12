@@ -1,0 +1,178 @@
+---
+title: 'Deployment Overview'
+description: 'Learn about deployment options and the build process for Vicenta'
+---
+
+## Introduction
+
+Vicenta is built with Next.js 14, which provides multiple deployment options and optimizations for production environments. This guide covers the build process, production optimizations, and available deployment platforms.
+
+## Build Process
+
+Vicenta uses the standard Next.js build system. The build process compiles your application for production, optimizing performance and creating static assets.
+
+### Running a Production Build
+
+To create a production build of Vicenta, run the build command:
+
+```bash
+npm run build
+```
+
+This command executes `next build`, which performs the following optimizations:
+
+- **Code Minification**: JavaScript and CSS are minified to reduce file sizes
+- **Tree Shaking**: Unused code is removed from the bundle
+- **Image Optimization**: Next.js optimizes images automatically
+- **Static Generation**: Pages are pre-rendered when possible for better performance
+- **Code Splitting**: Automatic code splitting for faster page loads
+
+### Testing the Production Build Locally
+
+After building, you can test the production build locally:
+
+```bash
+npm run build
+npm start
+```
+
+The `npm start` command runs `next start`, which serves the production build on `http://localhost:3000`.
+
+<Note>
+Always test your production build locally before deploying to ensure everything works as expected.
+</Note>
+
+## Production Optimization
+
+### Performance Features
+
+Vicenta leverages Next.js 14's built-in optimizations:
+
+<CardGroup cols={2}>
+  <Card title="Automatic Code Splitting" icon="scissors">
+    Each page only loads the JavaScript it needs, reducing initial load time
+  </Card>
+  
+  <Card title="Image Optimization" icon="image">
+    Images are automatically optimized and served in modern formats like WebP
+  </Card>
+  
+  <Card title="Font Optimization" icon="font">
+    Fonts are optimized and self-hosted to eliminate external network requests
+  </Card>
+  
+  <Card title="Script Optimization" icon="code">
+    Third-party scripts are loaded efficiently to minimize performance impact
+  </Card>
+</CardGroup>
+
+### TypeScript Compilation
+
+Vicenta is built with TypeScript, which is compiled during the build process:
+
+- Type checking ensures code quality and catches errors before deployment
+- TypeScript is compiled to optimized JavaScript
+- Source maps can be generated for debugging (configured in `next.config.mjs`)
+
+### CSS Processing
+
+Tailwind CSS classes are processed during build:
+
+- Unused styles are purged from the final bundle
+- CSS is minified and optimized
+- Critical CSS is inlined for faster first paint
+
+## Deployment Options
+
+Vicenta can be deployed to various platforms that support Next.js applications:
+
+<CardGroup cols={2}>
+  <Card title="Vercel" icon="rocket" href="/deployment/vercel">
+    The recommended platform for Next.js applications with zero-configuration deployment
+  </Card>
+  
+  <Card title="Self-Hosted" icon="server">
+    Deploy to your own infrastructure using Node.js servers
+  </Card>
+  
+  <Card title="Docker" icon="docker">
+    Containerize your application for consistent deployment across environments
+  </Card>
+  
+  <Card title="Other Platforms" icon="cloud">
+    Deploy to AWS, Google Cloud, Azure, or other cloud providers
+  </Card>
+</CardGroup>
+
+### Platform Comparison
+
+| Platform | Setup Complexity | Auto-Scaling | CI/CD Integration | Cost |
+|----------|-----------------|--------------|-------------------|------|
+| Vercel | Very Easy | Automatic | Built-in | Free tier available |
+| Self-Hosted | Moderate | Manual | Custom required | Variable |
+| Docker | Moderate | Depends on orchestration | Custom required | Variable |
+| AWS/GCP/Azure | Complex | Configurable | Available | Variable |
+
+<Tip>
+For most use cases, we recommend deploying to Vercel for the best developer experience and automatic optimizations. See our [Vercel deployment guide](/deployment/vercel) for detailed instructions.
+</Tip>
+
+## Environment Variables
+
+Before deploying, ensure you configure any necessary environment variables:
+
+### Setting Up Environment Variables
+
+1. Create environment-specific files locally (not committed to git):
+   - `.env.local` - Local development overrides
+   - `.env.production` - Production-specific variables
+
+2. Configure variables in your deployment platform's dashboard
+
+3. Access variables in your code using `process.env.VARIABLE_NAME`
+
+<Warning>
+Never commit sensitive credentials to your repository. Always use environment variables for API keys, database URLs, and other secrets.
+</Warning>
+
+### Required Environment Variables
+
+Check your application code for any required environment variables before deploying. Common variables include:
+
+- API endpoints
+- Authentication keys
+- Database connection strings
+- Third-party service credentials
+
+## Build Output
+
+After running `npm run build`, Next.js generates a `.next` directory containing:
+
+- **Static HTML files** for pre-rendered pages
+- **JavaScript bundles** for client-side code
+- **Server code** for API routes and server components
+- **Build manifest** with metadata about the build
+
+<Info>
+The `.next` directory should never be committed to version control. It's automatically generated during deployment.
+</Info>
+
+## Next Steps
+
+<Steps>
+  <Step title="Choose Your Platform">
+    Decide where you want to deploy Vicenta based on your requirements
+  </Step>
+  
+  <Step title="Configure Environment">
+    Set up any necessary environment variables for your deployment
+  </Step>
+  
+  <Step title="Deploy">
+    Follow the platform-specific deployment guide (start with [Vercel](/deployment/vercel))
+  </Step>
+  
+  <Step title="Monitor">
+    Set up monitoring and analytics to track your application's performance
+  </Step>
+</Steps>

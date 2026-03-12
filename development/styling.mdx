@@ -1,0 +1,406 @@
+---
+title: "Styling Guide"
+description: "Learn how to use Tailwind CSS and the styling approach in Vicenta"
+---
+
+## Overview
+
+Vicenta uses Tailwind CSS 3.4.1 as its primary styling solution, providing a utility-first approach to building responsive, modern interfaces. The project includes built-in dark mode support and optimized font loading.
+
+## Tailwind CSS Setup
+
+Tailwind CSS is configured to scan all component files for class names:
+
+```typescript
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+<Info>
+  The `content` array tells Tailwind which files to scan for class names. This ensures unused styles are purged in production builds.
+</Info>
+
+## Global Styles
+
+Global styles are defined in `src/app/globals.css` and include Tailwind directives, CSS custom properties, and utility classes.
+
+### Tailwind Directives
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+These directives inject Tailwind's:
+- **base**: CSS reset and base styles
+- **components**: Component classes (can be extended)
+- **utilities**: Utility classes like `flex`, `pt-4`, etc.
+
+### CSS Custom Properties
+
+The application uses CSS custom properties (CSS variables) for dynamic theming:
+
+```css
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+```
+
+These variables are referenced in the body styles:
+
+```css
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+```
+
+<Note>
+  RGB values are stored as comma-separated numbers (e.g., `0, 0, 0`) so they can be used with `rgb()` and `rgba()` functions.
+</Note>
+
+## Dark Mode Support
+
+The application includes automatic dark mode support using the `prefers-color-scheme` media query:
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+```
+
+### Using Dark Mode in Components
+
+Tailwind's dark mode utilities work automatically with the `dark:` prefix:
+
+```tsx
+<div className="bg-white dark:bg-black text-black dark:text-white">
+  This adapts to the user's color scheme preference
+</div>
+```
+
+<Tip>
+  The dark mode behavior is based on the system preference. To enable manual toggle, you would need to add `darkMode: 'class'` to `tailwind.config.ts` and implement a theme switcher.
+</Tip>
+
+## Custom Utilities
+
+The project includes a custom utility class defined in the `@layer utilities` directive:
+
+```css
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+```
+
+This utility improves text rendering by balancing text across multiple lines:
+
+```tsx
+<p className="text-balance">
+  This text will be balanced across lines for better readability
+</p>
+```
+
+<Info>
+  The `text-wrap: balance` CSS property is a modern feature that may not be supported in all browsers. It's used in the default Next.js template for improved typography.
+</Info>
+
+## Theme Extensions
+
+The Tailwind configuration extends the default theme with custom gradient utilities:
+
+### Radial Gradients
+
+```tsx
+<div className="bg-gradient-radial from-blue-500 to-purple-600">
+  Radial gradient background
+</div>
+```
+
+### Conic Gradients
+
+```tsx
+<div className="bg-gradient-conic from-sky-200 via-blue-200">
+  Conic gradient background
+</div>
+```
+
+These custom gradients are used in the default home page for visual effects:
+
+```tsx
+// Example from page.tsx
+<div className="relative before:bg-gradient-radial after:bg-gradient-conic">
+  {/* Content with gradient effects */}
+</div>
+```
+
+## Font Optimization
+
+The application uses Next.js font optimization with Google Fonts:
+
+```tsx
+// src/app/layout.tsx
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
+```
+
+<CardGroup cols={2}>
+  <Card title="Automatic Optimization" icon="gauge-high">
+    Next.js automatically downloads and self-hosts Google Fonts, eliminating external requests and improving performance.
+  </Card>
+  
+  <Card title="FOUT Prevention" icon="eye-slash">
+    Fonts are loaded with optimal fallbacks to prevent Flash of Unstyled Text.
+  </Card>
+</CardGroup>
+
+## Common Styling Patterns
+
+### Layout Utilities
+
+Flexbox and Grid are extensively used throughout the application:
+
+```tsx
+// Centered flex container
+<div className="flex items-center justify-center min-h-screen">
+  <Content />
+</div>
+
+// Responsive grid
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  <Card />
+  <Card />
+  <Card />
+  <Card />
+</div>
+```
+
+### Responsive Design
+
+Tailwind's responsive modifiers follow a mobile-first approach:
+
+```tsx
+<div className="
+  text-sm      // Default (mobile)
+  md:text-base // Medium screens and up
+  lg:text-lg   // Large screens and up
+">
+  Responsive text size
+</div>
+```
+
+| Breakpoint | Prefix | Min Width |
+|------------|--------|----------|
+| Mobile | (none) | 0px |
+| Tablet | `md:` | 768px |
+| Desktop | `lg:` | 1024px |
+| Large | `xl:` | 1280px |
+| Extra Large | `2xl:` | 1536px |
+
+### Interactive States
+
+Tailwind provides modifiers for hover, focus, and other states:
+
+```tsx
+<button className="
+  bg-blue-500 
+  hover:bg-blue-600 
+  active:bg-blue-700
+  focus:ring-2 
+  focus:ring-blue-300
+  transition-colors
+">
+  Interactive Button
+</button>
+```
+
+### Dark Mode Patterns
+
+Combining responsive and dark mode modifiers:
+
+```tsx
+<div className="
+  bg-gray-100 
+  dark:bg-gray-900
+  border-gray-300
+  dark:border-gray-700
+  md:p-8
+  lg:p-12
+">
+  Responsive dark mode container
+</div>
+```
+
+## Best Practices
+
+<Steps>
+  <Step title="Use Semantic Class Names">
+    Group related utilities together and consider extracting common patterns:
+    
+    ```tsx
+    // Instead of repeating:
+    <button className="px-4 py-2 bg-blue-500 text-white rounded">Click</button>
+    <button className="px-4 py-2 bg-blue-500 text-white rounded">Submit</button>
+    
+    // Create a component:
+    function Button({ children }) {
+      return (
+        <button className="px-4 py-2 bg-blue-500 text-white rounded">
+          {children}
+        </button>
+      );
+    }
+    ```
+  </Step>
+  
+  <Step title="Leverage CSS Variables">
+    Use CSS custom properties for values that change based on theme or context:
+    
+    ```css
+    :root {
+      --spacing-unit: 8px;
+    }
+    ```
+    
+    ```tsx
+    <div style={{ padding: 'calc(var(--spacing-unit) * 2)' }} />
+    ```
+  </Step>
+  
+  <Step title="Optimize for Dark Mode">
+    Always test your UI in both light and dark modes:
+    
+    ```tsx
+    <div className="
+      bg-white dark:bg-gray-900
+      text-gray-900 dark:text-gray-100
+      border-gray-200 dark:border-gray-800
+    ">
+      Content that works in both modes
+    </div>
+    ```
+  </Step>
+  
+  <Step title="Use Tailwind IntelliSense">
+    Install the Tailwind CSS IntelliSense VS Code extension for autocomplete and class name suggestions.
+  </Step>
+</Steps>
+
+## Adding Custom Styles
+
+### Extending the Theme
+
+Add custom colors, spacing, or other design tokens in `tailwind.config.ts`:
+
+```typescript
+theme: {
+  extend: {
+    colors: {
+      brand: {
+        50: '#f0f9ff',
+        500: '#0ea5e9',
+        900: '#0c4a6e',
+      },
+    },
+    spacing: {
+      '128': '32rem',
+    },
+  },
+}
+```
+
+### Custom Component Classes
+
+For reusable component styles, use the `@layer components` directive:
+
+```css
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+  }
+}
+```
+
+<Note>
+  Use `@layer` to ensure your custom styles have the correct specificity and can be purged in production.
+</Note>
+
+## PostCSS Integration
+
+Tailwind CSS is processed through PostCSS, configured in `postcss.config.mjs`:
+
+```javascript
+const config = {
+  plugins: {
+    tailwindcss: {},
+  },
+};
+```
+
+<Tip>
+  You can add additional PostCSS plugins here, such as `autoprefixer` (included by Next.js) or `postcss-nested` for nested CSS syntax.
+</Tip>
+
+## Production Optimization
+
+In production builds, Tailwind automatically:
+
+- **Purges unused styles** based on the `content` configuration
+- **Minifies CSS** for smaller bundle sizes
+- **Generates optimal class names** for better performance
+
+<Info>
+  The production CSS bundle only includes the utility classes you actually use, resulting in significantly smaller file sizes.
+</Info>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Development Setup" icon="screwdriver-wrench" href="/development/setup">
+    Set up your development environment
+  </Card>
+  <Card title="Project Structure" icon="folder-tree" href="/development/project-structure">
+    Explore the codebase organization
+  </Card>
+</CardGroup>

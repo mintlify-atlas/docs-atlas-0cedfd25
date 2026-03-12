@@ -1,0 +1,201 @@
+---
+title: "Development Setup"
+description: "Set up your development environment for the Vicenta Next.js application"
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+<CardGroup cols={2}>
+  <Card title="Node.js" icon="node-js">
+    Version 20.x or higher is required. The project is tested with Node.js 20+.
+  </Card>
+  <Card title="Package Manager" icon="box">
+    npm (comes with Node.js) or your preferred package manager
+  </Card>
+</CardGroup>
+
+<Steps>
+  <Step title="Verify Node.js Installation">
+    Check that Node.js is installed and meets the version requirement:
+    
+    ```bash
+    node --version
+    ```
+    
+    You should see v20.x.x or higher.
+  </Step>
+
+  <Step title="Clone and Navigate to Project">
+    Navigate to the front-end application directory:
+    
+    ```bash
+    cd workspace/source/front
+    ```
+  </Step>
+
+  <Step title="Install Dependencies">
+    Install all project dependencies using npm:
+    
+    ```bash
+    npm install
+    ```
+    
+    This will install:
+    - **React 18** - UI library
+    - **Next.js 14.2.6** - React framework
+    - **TypeScript 5** - Type safety
+    - **Tailwind CSS 3.4.1** - Utility-first CSS framework
+    - **ESLint** - Code linting
+  </Step>
+
+  <Step title="Start Development Server">
+    Run the development server:
+    
+    ```bash
+    npm run dev
+    ```
+    
+    The application will be available at [http://localhost:3000](http://localhost:3000).
+  </Step>
+</Steps>
+
+## Editor Setup
+
+### Recommended: Visual Studio Code
+
+For the best development experience, we recommend using Visual Studio Code with the following extensions:
+
+<Accordion title="Recommended VS Code Extensions">
+  - **ESLint** - Integrates ESLint for code quality
+  - **Tailwind CSS IntelliSense** - Autocomplete for Tailwind classes
+  - **TypeScript and JavaScript Language Features** - Built-in TypeScript support
+  - **Prettier** - Code formatting (optional but recommended)
+</Accordion>
+
+<Note>
+  The project includes an `.eslintrc.json` configuration that extends `next/core-web-vitals` for consistent code quality.
+</Note>
+
+## Available Scripts
+
+The project includes several npm scripts defined in `package.json`:
+
+| Script | Command | Description |
+|--------|---------|-------------|
+| **dev** | `npm run dev` | Starts the development server with hot reload |
+| **build** | `npm run build` | Creates an optimized production build |
+| **start** | `npm start` | Runs the production server (requires build first) |
+| **lint** | `npm run lint` | Runs ESLint to check code quality |
+
+## Development Workflow
+
+<Steps>
+  <Step title="Start Development Server">
+    Always begin by running `npm run dev` to start the Next.js development server with hot module replacement.
+  </Step>
+
+  <Step title="Make Changes">
+    Edit files in the `src/` directory. The development server will automatically reload when you save changes.
+    
+    <Tip>
+      Start editing `src/app/page.tsx` to see changes reflected immediately in your browser.
+    </Tip>
+  </Step>
+
+  <Step title="Lint Your Code">
+    Before committing, run the linter to check for code quality issues:
+    
+    ```bash
+    npm run lint
+    ```
+  </Step>
+
+  <Step title="Build for Production">
+    Test your production build locally:
+    
+    ```bash
+    npm run build
+    npm start
+    ```
+    
+    This ensures your code works correctly in production mode.
+  </Step>
+</Steps>
+
+## TypeScript Configuration
+
+The project uses TypeScript with strict mode enabled. Key configuration details:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+<Info>
+  The `@/*` path alias allows you to import from `src/` using absolute imports:
+  ```typescript
+  import Component from '@/components/Component';
+  ```
+</Info>
+
+## Environment Setup
+
+### PostCSS Configuration
+
+The project uses PostCSS to process Tailwind CSS. The configuration is in `postcss.config.mjs`:
+
+```javascript
+const config = {
+  plugins: {
+    tailwindcss: {},
+  },
+};
+```
+
+### Next.js Configuration
+
+The Next.js configuration (`next.config.mjs`) uses default settings. You can extend it as needed for custom webpack configurations, redirects, or environment variables.
+
+## Troubleshooting
+
+<Accordion title="Port 3000 is already in use">
+  If port 3000 is occupied, Next.js will automatically suggest the next available port, or you can specify a custom port:
+  
+  ```bash
+  npm run dev -- -p 3001
+  ```
+</Accordion>
+
+<Accordion title="Module not found errors">
+  Try deleting `node_modules` and reinstalling:
+  
+  ```bash
+  rm -rf node_modules package-lock.json
+  npm install
+  ```
+</Accordion>
+
+<Accordion title="TypeScript errors in editor">
+  Ensure your editor's TypeScript version matches the project's. In VS Code, you can select the workspace TypeScript version from the command palette.
+</Accordion>
+
+## Next Steps
+
+Now that your environment is set up, explore:
+
+<CardGroup cols={2}>
+  <Card title="Project Structure" icon="folder-tree" href="/development/project-structure">
+    Learn about the codebase organization
+  </Card>
+  <Card title="Styling Guide" icon="palette" href="/development/styling">
+    Understand the Tailwind CSS setup
+  </Card>
+</CardGroup>

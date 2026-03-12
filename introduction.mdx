@@ -1,0 +1,103 @@
+---
+title: Introduction
+description: Welcome to Vicenta - A modern Next.js web application
+---
+
+## What is Vicenta?
+
+Vicenta is a modern web application built with Next.js 14, React 18, and TypeScript. It provides a solid foundation for building scalable, type-safe web applications with excellent developer experience and performance out of the box.
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Next.js 14" icon="react">
+    Built on the latest Next.js App Router with server components and streaming support
+  </Card>
+  <Card title="TypeScript" icon="code">
+    Full TypeScript support with strict type checking for enhanced code quality
+  </Card>
+  <Card title="Tailwind CSS" icon="paintbrush">
+    Utility-first CSS framework for rapid UI development with custom design tokens
+  </Card>
+  <Card title="React 18" icon="bolt">
+    Leverages the latest React features including concurrent rendering and automatic batching
+  </Card>
+</CardGroup>
+
+## Technology Stack
+
+Vicenta is built with a modern, carefully selected technology stack:
+
+- **Framework**: Next.js 14.2.6 with App Router
+- **UI Library**: React 18 with React DOM
+- **Language**: TypeScript 5 with strict mode enabled
+- **Styling**: Tailwind CSS 3.4.1 with custom gradient utilities
+- **Code Quality**: ESLint with Next.js configuration
+- **Font Optimization**: Next.js font optimization with Inter font family
+
+## Project Structure
+
+<Note>
+  Vicenta follows the Next.js 14 App Router convention with the `src/app` directory structure.
+</Note>
+
+The application is organized as follows:
+
+```bash
+front/
+├── src/
+│   └── app/
+│       ├── layout.tsx      # Root layout with metadata
+│       ├── page.tsx        # Home page component
+│       ├── globals.css     # Global styles with Tailwind directives
+│       └── favicon.ico     # Application favicon
+├── public/                 # Static assets
+├── tailwind.config.ts      # Tailwind configuration
+├── next.config.mjs         # Next.js configuration
+├── tsconfig.json          # TypeScript configuration
+└── package.json           # Dependencies and scripts
+```
+
+## TypeScript Configuration
+
+Vicenta is configured with strict TypeScript settings for maximum type safety:
+
+```json package.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+<Tip>
+  The `@/*` path alias allows you to import modules from the `src` directory without relative paths.
+</Tip>
+
+## Custom Tailwind Configuration
+
+Vicenta extends Tailwind CSS with custom gradient utilities:
+
+```typescript tailwind.config.ts
+theme: {
+  extend: {
+    backgroundImage: {
+      "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      "gradient-conic":
+        "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+    },
+  },
+}
+```
+
+These custom gradients enable sophisticated visual effects used throughout the application.
+
+## Next Steps
+
+<Card title="Quickstart Guide" icon="rocket" href="/quickstart">
+  Get Vicenta running locally in minutes with our step-by-step quickstart guide
+</Card>

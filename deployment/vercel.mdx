@@ -1,0 +1,361 @@
+---
+title: 'Deploy to Vercel'
+description: 'Step-by-step guide to deploy Vicenta to Vercel'
+---
+
+## Introduction
+
+Vercel is the recommended platform for deploying Next.js applications. It's created by the same team that builds Next.js and offers zero-configuration deployment with automatic optimizations, CI/CD, and edge network distribution.
+
+<Info>
+Vercel provides a generous free tier that's perfect for development and small production applications.
+</Info>
+
+## Prerequisites
+
+Before deploying to Vercel, ensure you have:
+
+- A GitHub, GitLab, or Bitbucket account with your Vicenta repository
+- A Vercel account (sign up at [vercel.com](https://vercel.com))
+- Your repository pushed to your Git provider
+
+<Note>
+Vercel can deploy from any Git branch, making it easy to set up preview deployments for pull requests.
+</Note>
+
+## Deployment Methods
+
+There are two primary ways to deploy Vicenta to Vercel:
+
+<CardGroup cols={2}>
+  <Card title="Git Integration" icon="git">
+    Automatic deployments triggered by Git pushes (recommended)
+  </Card>
+  
+  <Card title="Vercel CLI" icon="terminal">
+    Manual deployments using the command-line interface
+  </Card>
+</CardGroup>
+
+## Method 1: Deploy with Git Integration
+
+This is the recommended approach as it enables automatic deployments and preview environments.
+
+<Steps>
+  <Step title="Import Your Repository">
+    Log in to your Vercel dashboard and click "Add New Project"
+    
+    Select your Git provider and authorize Vercel to access your repositories.
+  </Step>
+  
+  <Step title="Select Your Repository">
+    Find and select the Vicenta repository from the list of available repositories.
+    
+    <Tip>
+    If you don't see your repository, click "Adjust GitHub App Permissions" to grant access to additional repositories.
+    </Tip>
+  </Step>
+  
+  <Step title="Configure Project Settings">
+    Vercel automatically detects that your project is a Next.js application and configures the build settings:
+    
+    - **Framework Preset**: Next.js (auto-detected)
+    - **Root Directory**: `./` (or `front/` if in a monorepo)
+    - **Build Command**: `npm run build`
+    - **Output Directory**: `.next` (auto-configured)
+    - **Install Command**: `npm install`
+    
+    <Warning>
+    If your Vicenta source code is in a subdirectory (like `front/`), make sure to set the Root Directory accordingly.
+    </Warning>
+  </Step>
+  
+  <Step title="Configure Environment Variables (Optional)">
+    If your application requires environment variables, add them in the "Environment Variables" section:
+    
+    ```bash
+    # Example environment variables
+    NEXT_PUBLIC_API_URL=https://api.example.com
+    DATABASE_URL=postgresql://...
+    API_SECRET_KEY=your-secret-key
+    ```
+    
+    You can set different values for Production, Preview, and Development environments.
+    
+    <Note>
+    Environment variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Keep sensitive keys private by omitting this prefix.
+    </Note>
+  </Step>
+  
+  <Step title="Deploy">
+    Click "Deploy" to start the deployment process.
+    
+    Vercel will:
+    - Clone your repository
+    - Install dependencies with `npm install`
+    - Run `npm run build` to create the production build
+    - Deploy to the global edge network
+    
+    The first deployment typically takes 1-2 minutes.
+  </Step>
+  
+  <Step title="Access Your Deployment">
+    Once deployed, Vercel provides:
+    
+    - A production URL (e.g., `vicenta.vercel.app`)
+    - Automatic HTTPS with SSL certificates
+    - Global CDN distribution
+    - Deployment logs and analytics
+    
+    <Info>
+    Every deployment gets a unique preview URL that you can share for testing before promoting to production.
+    </Info>
+  </Step>
+</Steps>
+
+## Method 2: Deploy with Vercel CLI
+
+For manual deployments or local testing, you can use the Vercel CLI.
+
+<Steps>
+  <Step title="Install Vercel CLI">
+    Install the Vercel CLI globally using npm:
+    
+    ```bash
+    npm install -g vercel
+    ```
+  </Step>
+  
+  <Step title="Login to Vercel">
+    Authenticate with your Vercel account:
+    
+    ```bash
+    vercel login
+    ```
+    
+    Follow the prompts to complete authentication.
+  </Step>
+  
+  <Step title="Deploy from Project Directory">
+    Navigate to your Vicenta project directory and run:
+    
+    ```bash
+    cd ~/workspace/source/front
+    vercel
+    ```
+    
+    For production deployments:
+    
+    ```bash
+    vercel --prod
+    ```
+    
+    <Tip>
+    The first time you run `vercel`, it will ask you to configure project settings. Subsequent deployments will use these saved settings.
+    </Tip>
+  </Step>
+</Steps>
+
+## Continuous Deployment
+
+Once connected via Git integration, Vercel automatically:
+
+### Production Deployments
+
+- Triggered by pushes to your main/master branch
+- Deployed to your production domain
+- Includes all production environment variables
+
+```bash
+git push origin main  # Triggers production deployment
+```
+
+### Preview Deployments
+
+- Triggered by pushes to any non-production branch
+- Each pull request gets a unique preview URL
+- Perfect for testing changes before merging
+
+```bash
+git checkout -b feature/new-feature
+git push origin feature/new-feature  # Triggers preview deployment
+```
+
+<Info>
+Preview deployments are automatically commented on pull requests with the deployment URL, making it easy for team members to review changes.
+</Info>
+
+## Custom Domain Setup
+
+To use a custom domain with your Vercel deployment:
+
+<Steps>
+  <Step title="Add Domain in Vercel">
+    Go to your project settings and navigate to the "Domains" section.
+    
+    Click "Add" and enter your domain name (e.g., `vicenta.example.com`).
+  </Step>
+  
+  <Step title="Configure DNS">
+    Vercel will provide DNS records to add to your domain registrar:
+    
+    **For root domains (example.com):**
+    ```
+    A Record: 76.76.21.21
+    ```
+    
+    **For subdomains (app.example.com):**
+    ```
+    CNAME: cname.vercel-dns.com
+    ```
+  </Step>
+  
+  <Step title="Verify and Wait">
+    After adding DNS records, Vercel automatically:
+    - Verifies domain ownership
+    - Issues SSL certificates
+    - Configures CDN routing
+    
+    This process typically takes a few minutes to 48 hours depending on DNS propagation.
+  </Step>
+</Steps>
+
+## Environment Variables Management
+
+Managing environment variables in Vercel:
+
+### Adding Variables
+
+1. Go to Project Settings > Environment Variables
+2. Add your variable name and value
+3. Select which environments to apply it to:
+   - Production
+   - Preview
+   - Development
+
+### Updating Variables
+
+<Warning>
+Changing environment variables requires a new deployment to take effect. Vercel will prompt you to redeploy after making changes.
+</Warning>
+
+### Accessing Variables in Code
+
+Environment variables are available via `process.env`:
+
+```typescript
+// For public variables (exposed to browser)
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+// For server-side only variables
+const secretKey = process.env.API_SECRET_KEY;
+```
+
+## Monitoring and Analytics
+
+Vercel provides built-in monitoring tools:
+
+<CardGroup cols={2}>
+  <Card title="Deployment Logs" icon="file-lines">
+    View build logs and runtime errors for each deployment
+  </Card>
+  
+  <Card title="Analytics" icon="chart-line">
+    Track page views, performance metrics, and Web Vitals
+  </Card>
+  
+  <Card title="Speed Insights" icon="gauge-high">
+    Monitor real-world performance data from your users
+  </Card>
+  
+  <Card title="Real-time Logs" icon="stream">
+    View serverless function logs in real-time
+  </Card>
+</CardGroup>
+
+## Build Configuration
+
+### Customizing Build Settings
+
+You can customize the build process in your project settings or using `vercel.json`:
+
+```json
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next"
+}
+```
+
+### Build Optimization
+
+Vercel automatically optimizes your Next.js build:
+
+- Enables compression (Gzip and Brotli)
+- Configures proper caching headers
+- Distributes static assets to edge network
+- Optimizes serverless functions
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Build fails with dependency errors">
+    Ensure all dependencies are listed in `package.json` and that you're using compatible versions.
+    
+    ```bash
+    # Clear and reinstall dependencies
+    rm -rf node_modules package-lock.json
+    npm install
+    ```
+  </Accordion>
+  
+  <Accordion title="Environment variables not working">
+    - Verify variables are set in Vercel dashboard
+    - Remember to prefix browser-accessible variables with `NEXT_PUBLIC_`
+    - Redeploy after changing environment variables
+  </Accordion>
+  
+  <Accordion title="Custom domain not working">
+    - Check DNS records are correctly configured
+    - Allow up to 48 hours for DNS propagation
+    - Verify domain ownership in Vercel dashboard
+  </Accordion>
+  
+  <Accordion title="TypeScript type errors during build">
+    Vercel runs type checking during build. Fix type errors locally first:
+    
+    ```bash
+    npm run build  # Test build locally
+    npm run lint   # Check for linting issues
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+For more detailed troubleshooting, check the deployment logs in your Vercel dashboard. They provide detailed error messages and stack traces.
+</Tip>
+
+## Best Practices
+
+1. **Use Git Integration**: Enable automatic deployments for the best workflow
+2. **Test Locally First**: Always run `npm run build` locally before pushing
+3. **Use Preview Deployments**: Test changes in preview environments before merging to production
+4. **Secure Environment Variables**: Never commit secrets to your repository
+5. **Monitor Performance**: Regularly check Vercel Analytics and Speed Insights
+6. **Set Up Custom Domain**: Use a custom domain for professional production deployments
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Vercel Documentation" icon="book" href="https://vercel.com/docs">
+    Explore advanced Vercel features and configurations
+  </Card>
+  
+  <Card title="Next.js Deployment" icon="rocket" href="https://nextjs.org/docs/deployment">
+    Learn more about Next.js deployment best practices
+  </Card>
+</CardGroup>

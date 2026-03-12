@@ -1,80 +1,283 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Get Vicenta up and running on your local machine
 ---
 
-## Get started in three steps
+## Prerequisites
 
-Get your documentation site running locally and make your first customization.
+Before you begin, ensure you have the following installed on your system:
 
-### Step 1: Set up your local environment
+- **Node.js**: Version 20 or higher (required for Next.js 14)
+- **Package Manager**: npm, yarn, or pnpm
+- **Git**: For cloning the repository
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+<Info>
+  Vicenta uses Node.js 20 types as specified in the `@types/node` dependency.
+</Info>
+
+## Installation
+
+<Steps>
+  <Step title="Clone the repository">
+    Navigate to the Vicenta source code directory:
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+    ```bash
+    cd workspace/source/front
+    ```
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    <Note>
+      If you're starting from scratch, clone the Vicenta repository first.
+    </Note>
+  </Step>
 
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Step title="Install dependencies">
+    Install all required packages using your preferred package manager:
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    <CodeGroup>
+      ```bash npm
+      npm install
+      ```
+      
+      ```bash yarn
+      yarn install
+      ```
+      
+      ```bash pnpm
+      pnpm install
+      ```
+    </CodeGroup>
+    
+    This will install the following core dependencies:
+    
+    - `next@14.2.6` - Next.js framework
+    - `react@^18` - React library
+    - `react-dom@^18` - React DOM rendering
+    - `typescript@^5` - TypeScript compiler
+    - `tailwindcss@^3.4.1` - Tailwind CSS framework
+    
+    <Tip>
+      The installation may take a few minutes depending on your internet connection.
+    </Tip>
+  </Step>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+  <Step title="Start the development server">
+    Run the development server with hot module replacement:
+    
+    <CodeGroup>
+      ```bash npm
+      npm run dev
+      ```
+      
+      ```bash yarn
+      yarn dev
+      ```
+      
+      ```bash pnpm
+      pnpm dev
+      ```
+    </CodeGroup>
+    
+    The server will start on `http://localhost:3000` by default.
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="View the application">
+    Open your browser and navigate to:
+    
+    ```
+    http://localhost:3000
+    ```
+    
+    You should see the Vicenta home page with the Next.js welcome screen.
+    
+    <Info>
+      The page will automatically reload when you make changes to the source code.
+    </Info>
+  </Step>
+</Steps>
 
-### Step 3: Go live
+## Development Workflow
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+### Editing the Home Page
 
-## Next steps
+The main application page is located at `src/app/page.tsx`. Any changes you make to this file will be reflected immediately in the browser:
 
-Now that you have your docs running, explore these key features:
+```tsx src/app/page.tsx
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      {/* Your content here */}
+    </main>
+  );
+}
+```
 
-<CardGroup cols={2}>
+### Modifying the Layout
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+The root layout in `src/app/layout.tsx` controls the overall structure and metadata:
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+```tsx src/app/layout.tsx
+export const metadata: Metadata = {
+  title: "Create Next App",
+  description: "Generated by create next app",
+};
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
+```
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+<Tip>
+  Update the metadata in `layout.tsx` to customize your application's title and description.
+</Tip>
 
-</CardGroup>
+### Global Styles
+
+Global CSS and Tailwind directives are defined in `src/app/globals.css`. This file includes:
+
+- Tailwind base styles
+- Custom CSS variables
+- Global utility classes
+
+## Available Scripts
+
+Vicenta includes several npm scripts for common development tasks:
+
+<CodeGroup>
+  ```bash Development
+  npm run dev
+  # Starts the Next.js development server with hot reload
+  ```
+  
+  ```bash Build
+  npm run build
+  # Creates an optimized production build
+  ```
+  
+  ```bash Production
+  npm run start
+  # Starts the production server (requires build first)
+  ```
+  
+  ```bash Linting
+  npm run lint
+  # Runs ESLint to check code quality
+  ```
+</CodeGroup>
+
+## Building for Production
+
+When you're ready to deploy, create a production build:
+
+<Steps>
+  <Step title="Create the build">
+    <CodeGroup>
+      ```bash npm
+      npm run build
+      ```
+      
+      ```bash yarn
+      yarn build
+      ```
+      
+      ```bash pnpm
+      pnpm build
+      ```
+    </CodeGroup>
+    
+    This generates an optimized production build in the `.next` directory.
+  </Step>
+
+  <Step title="Test the production build locally">
+    <CodeGroup>
+      ```bash npm
+      npm run start
+      ```
+      
+      ```bash yarn
+      yarn start
+      ```
+      
+      ```bash pnpm
+      pnpm start
+      ```
+    </CodeGroup>
+    
+    The production server will start on `http://localhost:3000`.
+  </Step>
+</Steps>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  The production build includes optimizations like minification, tree-shaking, and automatic code splitting.
 </Note>
+
+## TypeScript Path Aliases
+
+Vicenta is configured with path aliases for cleaner imports. Instead of relative paths, use the `@/` prefix:
+
+```typescript
+// Instead of this:
+import { Component } from '../../../components/Component';
+
+// Use this:
+import { Component } from '@/components/Component';
+```
+
+The alias is configured in `tsconfig.json`:
+
+```json tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+## Troubleshooting
+
+### Port Already in Use
+
+If port 3000 is already in use, you can specify a different port:
+
+```bash
+npm run dev -- -p 3001
+```
+
+### TypeScript Errors
+
+Run the TypeScript compiler to check for type errors:
+
+```bash
+npx tsc --noEmit
+```
+
+### Clear Next.js Cache
+
+If you encounter build issues, try clearing the Next.js cache:
+
+```bash
+rm -rf .next
+npm run dev
+```
+
+## Next Steps
+
+Now that you have Vicenta running locally, you can:
+
+- Customize the home page in `src/app/page.tsx`
+- Add new routes by creating files in the `src/app` directory
+- Configure Tailwind CSS in `tailwind.config.ts`
+- Update metadata in `src/app/layout.tsx`
+
+<Tip>
+  Check the Next.js 14 documentation for details on the App Router and server components.
+</Tip>
